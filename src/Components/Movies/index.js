@@ -70,11 +70,11 @@ const Input = styled.input`
 
 const YearSection = styled.span`
     text-align: center;
-`
+`;
 
 const NoMoviesFound = styled.h1`
     text-align: center;
-`
+`;
 
 const Movies = (props) => {
     const [searchQuery, setSearchQuery] = useState('Batman')

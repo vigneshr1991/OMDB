@@ -4,7 +4,15 @@ import styled, { css } from 'styled-components';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from 'react-icons/fa';
 
-import "./styles.scss";
+// set carousel card heights
+const level1Height = '250px';
+const level1Width = '310px';
+const level0Height = '340px';
+const level0Width = '362px';
+
+const levelM1Left = '690px';
+const level0Left = '320px';
+const level1Left = '0px';
 
 const OuterContainer = styled.div`
     margin: 0px auto;
@@ -52,10 +60,122 @@ const Image = styled.img`
     border-radius: 10px;
 `;
 
+const ItemSection = styled.div.attrs(props => ({
+    className: props.className,
+}))`
+    width: 200px;
+    text-align: center;
+    color: white;
+    font-size: 40px;
+    position: absolute;
+    transition: height 1s, width 1s, left 1s, margin-top 1s, line-height 1s, background-color 1s;
+
+    &.level-1 {
+        height: ${level1Height};
+        width: ${level1Width};
+        line-height: ${level1Height};
+        left: ${levelM1Left};
+        margin-top: 60px;
+    }
+    
+    &.level0 {
+        height: ${level0Height};
+        width: ${level0Width};
+        line-height: ${level0Height};
+        left: ${level0Left};
+    }
+    
+    &.level1 {
+        height: ${level1Height};
+        width: ${level1Width};
+        line-height: ${level1Height};
+        margin-top: 60px;
+        left: ${level1Left};
+    }
+
+    &.left-enter {
+        opacity: 0;
+        left: ${level0Left} - ${level1Width};
+        height: ${level1Height} - 30;
+        width: ${level1Width} - 20;
+        line-height: ${level1Height} - 30;
+        margin-top: 40px;
+    }
+    
+    &.left-enter.left-enter-active {
+        opacity: 1;
+        left: ${level0Left};
+        height: ${level1Height};
+        width: ${level1Width};
+        line-height: ${level1Height};
+        margin-top: 25px;
+        transition: left 1s, opacity 1s, height 1s, width 1s, margin-top 1s, line-height 1s;
+    }
+    
+    &.left-leave {
+        opacity: 1;
+        left: ${levelM1Left};
+        height: ${level1Height};
+        width: ${level1Width};
+        line-height: ${level1Height};
+        margin-top: 25px;
+    }
+    
+    &.left-leave.left-leave-active {
+        left: ${levelM1Left} + ${level1Width} + 20;
+        opacity: 0;
+        height: ${level1Height} - 30;
+        line-height: 120px;
+        margin-top: 40px;
+        width: ${level1Width} - 20;
+        transition: left 1s, opacity 1s, height 1s, width 1s, margin-top 1s, line-height 1s;
+    }
+    
+    &.right-enter {
+        opacity: 0;
+        left: ${levelM1Left} + ${level1Width};
+        height: ${level1Height} - 30;
+        width: ${level1Width} - 20;
+        line-height: ${level1Height} - 30;
+        margin-top: 40px;
+    }
+    
+    &.right-enter.right-enter-active {
+        left: ${levelM1Left};
+        opacity: 1;
+        height: ${level1Height};
+        margin-top: 25px;
+        line-height: ${level1Height};
+        width: ${level1Width};
+        transition: left 1s, opacity 1s, height 1s, width 1s, margin-top 1s, line-height 1s;
+    }
+    
+    &.right-leave {
+        left: ${level0Left};
+        height: ${level1Height};
+        opacity: 1;
+        margin-top: 25px;
+        line-height: ${level1Height};
+        width: ${level1Width};
+    }
+    
+    &.right-leave.right-leave-active {
+        left: ${level0Left} - ${level1Width};
+        opacity: 0;
+        height: ${level1Height} - 30;
+        width: ${level1Width} - 20;
+        line-height: ${level1Height} - 30;
+        margin-top: 40px;
+        transition: left 1s, opacity 1s, height 1s, width 1s, margin-top 1s, line-height 1s;
+    }
+`;
+
 const ImageSliderNew = (props) => {
     const [active, setActive] = useState(props.active);
-    const [direction, setDirection] = useState('');
-    
+    const [direction, setDirection] = useState('left');
+
+    const nodeRef = React.useRef(null);
+
     const getImages = () => {
         const { slides } = props;
         let items = [];
@@ -68,7 +188,16 @@ const ImageSliderNew = (props) => {
                 index = i % slides.length;
             }
             level = active - i;
-            items.push(<Item key={index} id={index} imageUrl={slides[index].image} level={level} />)
+            items.push(
+                <CSSTransition
+                    key={slides[index].image}
+                    nodeRef={nodeRef}
+                    classNames={direction}
+                    timeout={500}
+                >
+                    <Item slide={slides[index]} direction={direction} level={level} />
+                </CSSTransition>
+            );
         }
         return <>{items}</>
     }
@@ -94,14 +223,10 @@ const ImageSliderNew = (props) => {
                 <ArrowIcon arrowLeft onClick={leftClick}>
                     <FaArrowAltCircleLeft />
                 </ArrowIcon>
-                <TransitionGroup 
+                <TransitionGroup
                     transitionName={direction}
                 >
-                    <CSSTransition 
-                        classNames={direction}
-                    >
-                        {getImages()}
-                    </CSSTransition>
+                    {getImages()}
                 </TransitionGroup>
                 <ArrowIcon arrowRight onClick={rightClick}>
                     <FaArrowAltCircleRight />
@@ -112,10 +237,11 @@ const ImageSliderNew = (props) => {
 }
 
 const Item = (props) => {
+    const { slide, level } = props;
     return(
-        <div className={`item level${props.level}`}>
-            <Image src={props.imageUrl} />
-        </div>
+        <ItemSection className={`level${level}`}>
+            <Image src={slide.image} />
+        </ItemSection>
     )
 }
 

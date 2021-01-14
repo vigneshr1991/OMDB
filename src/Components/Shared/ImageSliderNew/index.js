@@ -60,8 +60,86 @@ const Image = styled.img`
     border-radius: 10px;
 `;
 
+const StyledGrid = styled.div`
+    .left-enter {
+        opacity: 0;
+        left: ${level0Left} - ${level1Width};
+        height: ${level1Height} - 30;
+        width: ${level1Width} - 20;
+        line-height: ${level1Height} - 30;
+        margin-top: 40px;
+    }
+    
+    .left-enter.left-enter-active {
+        opacity: 1;
+        left: ${level0Left};
+        height: ${level1Height};
+        width: ${level1Width};
+        line-height: ${level1Height};
+        margin-top: 25px;
+        transition: left 1s, opacity 1s, height 1s, width 1s, margin-top 1s, line-height 1s;
+    }
+    
+    .left-exit {
+        opacity: 1;
+        left: ${levelM1Left};
+        height: ${level1Height};
+        width: ${level1Width};
+        line-height: ${level1Height};
+        margin-top: 25px;
+    }
+    
+    .left-exit.left-exit-active {
+        left: ${levelM1Left} + ${level1Width} + 20;
+        opacity: 0;
+        height: ${level1Height} - 30;
+        line-height: 120px;
+        margin-top: 40px;
+        width: ${level1Width} - 20;
+        transition: left 1s, opacity 1s, height 1s, width 1s, margin-top 1s, line-height 1s;
+    }
+    
+    .right-enter {
+        opacity: 0;
+        left: ${levelM1Left} + ${level1Width};
+        height: ${level1Height} - 30;
+        width: ${level1Width} - 20;
+        line-height: ${level1Height} - 30;
+        margin-top: 40px;
+    }
+    
+    .right-enter.right-enter-active {
+        left: ${levelM1Left};
+        opacity: 1;
+        height: ${level1Height};
+        margin-top: 25px;
+        line-height: ${level1Height};
+        width: ${level1Width};
+        transition: left 1s, opacity 1s, height 1s, width 1s, margin-top 1s, line-height 1s;
+    }
+    
+    .right-exit {
+        left: ${level0Left};
+        height: ${level1Height};
+        opacity: 1;
+        margin-top: 25px;
+        line-height: ${level1Height};
+        width: ${level1Width};
+    }
+    
+    .right-exit.right-exit-active {
+        left: ${level0Left} - ${level1Width};
+        opacity: 0;
+        height: ${level1Height} - 30;
+        width: ${level1Width} - 20;
+        line-height: ${level1Height} - 30;
+        margin-top: 40px;
+        transition: left 1s, opacity 1s, height 1s, width 1s, margin-top 1s, line-height 1s;
+    }
+`;
+
 const ItemSection = styled.div.attrs(props => ({
-    className: props.className,
+    // className: props.className,
 }))`
     width: 200px;
     text-align: center;
@@ -69,7 +147,7 @@ const ItemSection = styled.div.attrs(props => ({
     font-size: 40px;
     position: absolute;
     transition: height 1s, width 1s, left 1s, margin-top 1s, line-height 1s, background-color 1s;
-
+    
     &.level-1 {
         height: ${level1Height};
         width: ${level1Width};
@@ -83,6 +161,7 @@ const ItemSection = styled.div.attrs(props => ({
         width: ${level0Width};
         line-height: ${level0Height};
         left: ${level0Left};
+        z-index: 9999;
     }
     
     &.level1 {
@@ -93,93 +172,26 @@ const ItemSection = styled.div.attrs(props => ({
         left: ${level1Left};
     }
 
-    &.left-enter {
-        opacity: 0;
-        left: ${level0Left} - ${level1Width};
-        height: ${level1Height} - 30;
-        width: ${level1Width} - 20;
-        line-height: ${level1Height} - 30;
-        margin-top: 40px;
+    &.level-2 {
+        opacity: 0
     }
     
-    &.left-enter.left-enter-active {
-        opacity: 1;
-        left: ${level0Left};
-        height: ${level1Height};
-        width: ${level1Width};
-        line-height: ${level1Height};
-        margin-top: 25px;
-        transition: left 1s, opacity 1s, height 1s, width 1s, margin-top 1s, line-height 1s;
-    }
-    
-    &.left-leave {
-        opacity: 1;
-        left: ${levelM1Left};
-        height: ${level1Height};
-        width: ${level1Width};
-        line-height: ${level1Height};
-        margin-top: 25px;
-    }
-    
-    &.left-leave.left-leave-active {
-        left: ${levelM1Left} + ${level1Width} + 20;
-        opacity: 0;
-        height: ${level1Height} - 30;
-        line-height: 120px;
-        margin-top: 40px;
-        width: ${level1Width} - 20;
-        transition: left 1s, opacity 1s, height 1s, width 1s, margin-top 1s, line-height 1s;
-    }
-    
-    &.right-enter {
-        opacity: 0;
-        left: ${levelM1Left} + ${level1Width};
-        height: ${level1Height} - 30;
-        width: ${level1Width} - 20;
-        line-height: ${level1Height} - 30;
-        margin-top: 40px;
-    }
-    
-    &.right-enter.right-enter-active {
-        left: ${levelM1Left};
-        opacity: 1;
-        height: ${level1Height};
-        margin-top: 25px;
-        line-height: ${level1Height};
-        width: ${level1Width};
-        transition: left 1s, opacity 1s, height 1s, width 1s, margin-top 1s, line-height 1s;
-    }
-    
-    &.right-leave {
-        left: ${level0Left};
-        height: ${level1Height};
-        opacity: 1;
-        margin-top: 25px;
-        line-height: ${level1Height};
-        width: ${level1Width};
-    }
-    
-    &.right-leave.right-leave-active {
-        left: ${level0Left} - ${level1Width};
-        opacity: 0;
-        height: ${level1Height} - 30;
-        width: ${level1Width} - 20;
-        line-height: ${level1Height} - 30;
-        margin-top: 40px;
-        transition: left 1s, opacity 1s, height 1s, width 1s, margin-top 1s, line-height 1s;
+    &.level2 {
+        opacity: 0
     }
 `;
 
 const ImageSliderNew = (props) => {
     const [active, setActive] = useState(props.active);
-    const [direction, setDirection] = useState('left');
-
-    const nodeRef = React.useRef(null);
+    const [direction, setDirection] = useState('right');
+    // const nodeRef = React.useRef(null);
 
     const getImages = () => {
         const { slides } = props;
         let items = [];
         let level;
+
+        // get previous, current and next node
         for (let i = active - 1; i < active + 2; i++) {
             let index = i;
             if (i < 0) {
@@ -191,14 +203,22 @@ const ImageSliderNew = (props) => {
             items.push(
                 <CSSTransition
                     key={slides[index].image}
-                    nodeRef={nodeRef}
+                    // nodeRef={nodeRef}
+                    in={true}
                     classNames={direction}
+                    // classNames={{
+                    //     enter: `${direction}-enter`,
+                    //     enterActive: `${direction}-enter-active`,
+                    //     exit: `${direction}-exit`,
+                    //     exitActive: `${direction}-exit-active`
+                    // }}
                     timeout={500}
                 >
                     <Item slide={slides[index]} direction={direction} level={level} />
                 </CSSTransition>
             );
         }
+        
         return <>{items}</>
     }
     
@@ -207,14 +227,14 @@ const ImageSliderNew = (props) => {
         let newActive = active;
         newActive--;
         setActive(newActive < 0 ? slides.length - 1 : newActive);
-        setDirection('left');
+        setDirection('right');
     }
     
     const leftClick = () => {
         const { slides } = props;
         let newActive = active;
         setActive((newActive + 1) % slides.length);
-        setDirection('right');
+        setDirection('left');
     }
     
     return(
@@ -223,9 +243,7 @@ const ImageSliderNew = (props) => {
                 <ArrowIcon arrowLeft onClick={leftClick}>
                     <FaArrowAltCircleLeft />
                 </ArrowIcon>
-                <TransitionGroup
-                    transitionName={direction}
-                >
+                <TransitionGroup appear={true} component={StyledGrid}>
                     {getImages()}
                 </TransitionGroup>
                 <ArrowIcon arrowRight onClick={rightClick}>
@@ -237,9 +255,9 @@ const ImageSliderNew = (props) => {
 }
 
 const Item = (props) => {
-    const { slide, level } = props;
+    const { slide, level, direction } = props;
     return(
-        <ItemSection className={`level${level}`}>
+        <ItemSection direction={direction} className={`level${level}`}>
             <Image src={slide.image} />
         </ItemSection>
     )
